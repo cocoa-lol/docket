@@ -11,9 +11,13 @@ host = "0.0.0.0"
 port = 80 #Set the default port
 arg = sys.argv
 app = Flask(__name__)
-
-print("arg: " + str(arg))
-
+if len(arg) >= 2:
+    try:
+        port = arg[(arg.index("--port") + 1)]
+    except IndexError as e:
+         raise ValueError("An error has occured while trying to get specified port (if any.) Make sure port is passed like: main.py --port 8080. Error: " + str(e))
+else:
+    print("[WARNING] Running at high-permission ports like 80 or 443 may raise a permission error. Port: " + str(port))
 @app.route('/')
 def index():
     return render_template("index.html")
