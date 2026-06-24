@@ -18,12 +18,28 @@
     </style>
 </head>
 <body>
-    <div id="content">
-      <script src="{{ url_for('static', filename='marked.min.js') }}"></script>
+    <div id="content"></div>
+          <script src="{{ url_for('static', filename='marked.min.js') }}"></script>
       <script>
-          const markdownString = "Welcome to Docket!\nDocket is FOSS, that gives you full creativity to your documents.\n# Arguments\n- --port (Defaults to HTTP 80)";
+          const markdownString = `
+          Welcome to Docket!
+
+Docket is FOSS, that gives you full creativity to your documents.
+
+# Arguments
+- --port (Defaults to HTTP 80)
+
+To add to your document pages, add an HTML file in /templates/docs/. The document name should be all the same across "document". 
+Inside index.html, add \`\n[document](/document)\`. It should look like:
+
+\`\`\`<script>
+
+          const markdownString = "# Docs\n- [Readme](/readme)\n[document](/document)";
+
+          document.getElementById('content').innerHTML = marked.parse(markdownString);
+
+      <\/script>`;
           document.getElementById('content').innerHTML = marked.parse(markdownString);
-      </script>
-    </div>
+      </script>\`\`\`
 </body>
 </html>
