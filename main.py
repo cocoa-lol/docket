@@ -35,13 +35,12 @@ def index():
 #Automatically render document pages
 @app.route("/docs/<site_name>")
 def docs(site_name):
-    print("Doc request for: " + site_name)
-    if Path("templates/docs/" + site_name + ".html").is_file():
-        if site_name + ".html" in os.listdir("templates/docs/"):
-            return render_template(f"docs/{site_name}.html")
-        else:
-            return "Page not found", 404
+    print("Got request for doc: " + site_name)
+    if site_name + ".html" in os.listdir("templates/docs/"):
+        print("Served doc: " + site_name)
+        return render_template("docs/" + site_name + ".html")
     else:
+        print("Failed to serve doc: " + site_name)
         return "Page not found", 404
 
 
