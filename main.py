@@ -15,7 +15,7 @@ CORS(app)
 #Parse port argument
 if len(arg) >= 2:
     if "--port" in arg:
-        if type(arg[arg.index("--port")]) == int:
+        if type(arg[arg.index("--port") + 1]) == int:
             port = arg[arg.index("--port") + 1]
             if port in [80, 443]:
                 print("[WARNING] Running at high-permission ports like 80 or 443 may raise a permission error. Port: " + str(port)) 
@@ -25,7 +25,7 @@ def get_sites():
     sites = []
     for f in Path("templates/docs/").iterdir():
         if f.is_file():
-            sites.append(f.name.strip(".html"))
+            sites.append(f.name.removesuffix(".html"))
     return jsonify(sites)
 
 @app.route("/")
@@ -37,7 +37,10 @@ def index():
 def docs(site_name):
     print("Doc request for: " + site_name)
     if Path("templates/docs/" + site_name + ".html").is_file():
-        return render_template(f"docs/{site_name}.html")
+        if site_name + ".html" in os.listdir("templates/docs/"):
+            return render_template(f"docs/{site_name}.html")
+        else:
+            return "Page not found", 404
     else:
         return "Page not found", 404
 
