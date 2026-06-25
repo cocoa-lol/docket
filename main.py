@@ -15,11 +15,13 @@ CORS(app)
 #Parse port argument
 if len(arg) >= 2:
     if "--port" in arg:
-        if type(arg[arg.index("--port") + 1]) == int:
-            port = arg[arg.index("--port") + 1]
+        try:
+            port = int(arg[arg.index("--port") + 1])
             if port in [80, 443]:
                 print("[WARNING] Running at high-permission ports like 80 or 443 may raise a permission error. Port: " + str(port)) 
-
+        except Exception as e:
+            print("Error parsing port: " + str(e))
+            
 @app.route("/api/sites")
 def get_sites():
     sites = []
