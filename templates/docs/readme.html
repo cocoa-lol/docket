@@ -11,35 +11,17 @@
       * {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       }
-      #content {
-        max-width: 500px;
-        margin: auto;
-      }
     </style>
 </head>
 <body>
-    <div id="content"></div>
-          <script src="{{ url_for('static', filename='marked.min.js') }}"></script>
-      <script>
-          const markdownString = `
-          Welcome to Docket!
+    <h1>Docket</h1>
+    <p>Welcome to Docket! To get started, you can run with [python] main.py<br>
+To use a custom port, pass the --port argument like this: python main.py --port 8080<br><br>
 
-Docket is FOSS, that gives you full creativity to your documents.
-
-# Arguments
-- --port (Defaults to HTTP 80)
-
-To add to your document pages, add an HTML file in /templates/docs/. The document name should be all the same across "document". 
-Inside index.html, add \`\n[document](/document)\`. It should look like:
-
-\`\`\`<script>
-
-          const markdownString = "# Docs\n- [Readme](/readme)\n[document](/document)";
-
-          document.getElementById('content').innerHTML = marked.parse(markdownString);
-
-      <\/script>`;
-          document.getElementById('content').innerHTML = marked.parse(markdownString);
-      </script>\`\`\`
+ Docket automatically shows all .html files stored in /templates/docs/<br>
+ Default pages: /, /readme<br>
+ The API to make your own custom index page is at /api/pages. It stores the endpoints for all pages in /templates/docs/.<br><br>
+ 
+Please forgive me for the bad HTML, I don't do HTML</p>
 </body>
 </html>

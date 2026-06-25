@@ -1,31 +1,46 @@
-from flask import render_template
-from flask import Flask
-from flask import url_for
+from flask import Flask, render_template, jsonify
 from waitress import serve
 import sys
+from pathlib import Path
 import os
-from flask import send_from_directory
+from flask_cors import CORS
 
-#args: --port [int]
-host = "0.0.0.0"
-port = 80 #Set the default port
+#Init
 arg = sys.argv
+port = 80 #Set the default port
+host = "0.0.0.0" #0.0.0.0 for all devices to access it
 app = Flask(__name__)
+
+CORS(app)
+#Parse port argument
 if len(arg) >= 2:
-    try:
-        port = arg[(arg.index("--port") + 1)]
-    except IndexError as e:
-         raise ValueError("An error has occured while trying to get specified port (if any.) Make sure port is passed like: main.py --port 8080. Error: " + str(e))
-elif port in [80, 443]:
-    print("[WARNING] Running at high-permission ports like 80 or 443 may raise a permission error. Port: " + str(port))
-@app.route('/')
+    if "--port" in arg:
+        if type(arg[arg.index("--port")]) == int:
+            port = arg[arg.index("--port") + 1]
+            if port in [80, 443]:
+                print("[WARNING] Running at high-permission ports like 80 or 443 may raise a permission error. Port: " + str(port)) 
+
+@app.route("/api/sites")
+def get_sites():
+    sites = []
+    for f in Path("templates/docs/").iterdir():
+        if f.is_file():
+            sites.append(f.name.strip(".html"))
+    return jsonify(sites)
+
+@app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route('/readme')
-def readme():
-    return render_template("docs/readme.html")
+#Automatically render document pages
+@app.route("/docs/<site_name>")
+def docs(site_name):
+    print("Doc request for: " + site_name)
+    if Path("templates/docs/" + site_name + ".html").is_file():
+        return render_template(f"docs/{site_name}.html")
+    else:
+        return "Page not found", 404
 
-if __name__=="__main__":
-    print("Running Docket at " + host + ":" + str(port))
+
+if __name__ == "__main__":
     serve(app, host=host, port=port)
