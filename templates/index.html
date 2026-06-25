@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documents - Docket</title>
+  <style>
+    body {
+      background-color: #ad6a6a;
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body>
   <div id="nav-links"></div>
@@ -20,7 +26,7 @@
 
         // 2. Loop through the API data and push the <a> tags into the array
         for (const element of data) {
-          linksHtml.push(`<a href="/docs/${element}">${element}</a> `);
+          linksHtml.push(`<a href="/docs/${element}">${element}</a><br>`);
         }
 
         // 3. Join the array items together and inject them into the DOM
